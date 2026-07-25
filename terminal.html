@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald Terminal</title>
+<meta name="description" content="The embedded terminal engine, tabs, split panes, and the console.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="on">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Feature</p>
+<h1 class="page">The terminal</h1>
+<p class="lede">Weald hosts real login shells inside its own window, one set per project. These are genuine terminals: <code>git</code>, <code>vim</code>, <code>claude</code>, and anything else behave exactly as they would elsewhere.</p>
+
+<h2 id="engine">The engine</h2>
+<p>macOS provides no supported way to place another application's window inside your own, so Weald does not attempt to embed an existing terminal application. It implements a terminal emulator, which is what native Mac applications do in this situation. The emulator forks a login shell over a pseudo-terminal and is compatible with <code>xterm-256color</code>.</p>
+<p>The first-party engine is built in layers: a pseudo-terminal and process supervisor, an incremental UTF-8 decoder and ANSI parser, a screen buffer with reflow and selection, and a renderer. Rendering defaults to Metal, drawing instanced quads against a glyph atlas that rasterizes each glyph once per style and scale, with color emoji passed through. A Core Text renderer is available as a fallback.</p>
+
+<h2 id="tabs">Tabs and split panes</h2>
+<p>Each project has its own tabbed terminal. New tabs are numbered monotonically, so titles remain stable as others are closed. A tab can be split into as many as four side-by-side panes; a split is inserted immediately to the right of the focused pane and takes the caret. Closing peels one pane at a time and only closes the tab once a single pane remains.</p>
+<p>Every pane runs its own login shell in the project directory. Font size changes apply to all panes at once. A tab that has not been split renders with no pane chrome at all.</p>
+
+<h2 id="persistence">Session persistence</h2>
+<p>Terminal sessions are owned by a process-wide registry keyed by project, not by the view that displays them. Switching to another tab in the project view, or to another project entirely, does not destroy the shells. Returning restores the same sessions with their scrollback intact.</p>
+<p>The same registry allows a command to be delivered to a project whose terminal has never been opened: the command is queued against a new tab and flushed into the shell the moment it is created.</p>
+
+<h2 id="grouping">Tab grouping and color</h2>
+<p>Tabs color themselves according to the kind of work the session is doing, so the tab bar communicates the state of several sessions at a glance. Classification reads the text of the task delivered to the tab and the title the running session reports as it works.</p>
+<table>
+  <tr><th>Group</th><th>Covers</th></tr>
+  <tr><td>Engineering</td><td>New code, features, implementation</td></tr>
+  <tr><td>Debugging</td><td>Faults and investigation, colored to read as attention</td></tr>
+  <tr><td>Research</td><td>Exploration, planning, understanding</td></tr>
+  <tr><td>Testing</td><td>Tests, specifications, coverage</td></tr>
+  <tr><td>Refactor</td><td>Cleanup, renames, restructuring</td></tr>
+  <tr><td>Docs</td><td>Readmes, specifications, comments</td></tr>
+  <tr><td>Review</td><td>Code and security review, pull requests</td></tr>
+  <tr><td>DevOps</td><td>Builds, releases, continuous integration</td></tr>
+</table>
+<p>Classification runs first as an instant offline keyword match. Where a local Claude Code login is available, a short headless call refines the result, memoized by input and falling back to the keyword result on any failure. The entire feature can be disabled, individual groups can be turned off or recolored, and any tab's color can be pinned by hand.</p>
+
+<h2 id="send">Sending work to Claude</h2>
+<p>Every path in the application that starts a Claude session goes through one function. It selects the target project, switches to its terminal, opens a fresh tab, and types a <code>cd</code> into the project directory followed by the <code>claude</code> invocation. The consequence is that a session started from the tray, from the board, or from a suggestion card is the same kind of session, visible in the same place, with no hidden background process.</p>
+<p>A separate mechanism, Quick Send, hands a session off to an external terminal application when that is preferred.</p>
+
+<h2 id="console">The console</h2>
+<p>Weald's default launch surface is a first-party console. Each line entered is routed by a simple, deterministic classifier: an explicit prefix forces shell or chat mode, a leading slash invokes a Weald command, a leading exclamation mark passes through to the shell, and a line whose first word resolves on <code>PATH</code> and reads as a command is executed. Anything else is treated as a message to the language model. The effect is that <code>git status</code> runs as a command while <code>git is great.</code> is understood as a sentence.</p>
+<p>The console shares the application's ticket store and model client, so it and any connected agent operate on the same state. It can be dismissed to reveal the full mission-control interface, and reopened from the sidebar or with a shortcut.</p>
+
+<h2 id="minimal">Minimal mode</h2>
+<p>Minimal mode collapses the application to the selected project's terminal tabs beneath a slim bar holding a project switcher, a model-readiness indicator, and an expand control. It is intended for use as a compact, always-present console. The project chosen in minimal mode is the project selected when the full interface is restored.</p>
+
+<h2 id="map">The context map</h2>
+<p>Weald mines Claude Code transcripts for each project into a local co-occurrence graph of files, prompt terms, and commands. No model inference is involved and nothing is transmitted. Pairs of items appearing in the same conversational turn strengthen an edge between them, and edge weight halves roughly every two weeks so that stale context recedes.</p>
+<p>The graph is used in two ways at once. As a map, it renders the project's live context as a field that responds to what you are typing. As autocomplete, matching entries surface as suggestion pills that inject a file mention, a completed word, or an entire past prompt directly into the terminal.</p>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

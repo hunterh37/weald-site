@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald FAQ</title>
+<meta name="description" content="Answers about requirements, licensing, privacy, tickets, and the terminal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="on">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Questions</p>
+<h1 class="page">Questions and answers</h1>
+<p class="lede">Direct answers to the questions asked most often about what Weald is, what it requires, and what it does with your data.</p>
+
+<h2 id="general">General</h2>
+<div class="qa">
+<details open><summary>What is Weald?</summary><div class="a"><p>A native macOS application that combines a terminal with a mission-control view of agent-driven development. It hosts your shell sessions, reads git history and Claude Code session data, and keeps task state as plain files inside each repository.</p></div></details>
+<details><summary>Is it a terminal or a project manager?</summary><div class="a"><p>Both, and the combination is the point. Because Weald hosts the terminal sessions itself, it can relate what an agent is doing right now to the commits it produced and the tickets it is working against. A separate terminal and a separate task tracker cannot make that connection.</p></div></details>
+<details><summary>Does it replace GitHub Issues or Jira?</summary><div class="a"><p>No. Weald's tickets are a developer-facing and agent-facing record that lives in the repository. GitHub data is read in where it is available, and a suggestion can be promoted into a GitHub issue, but Weald is not intended as the tracker external stakeholders use.</p></div></details>
+<details><summary>Does Weald run my agents for me?</summary><div class="a"><p>It starts Claude sessions on request and observes them, but it does not autonomously drive them. Weald is the surface above your agents rather than an orchestrator of them.</p></div></details>
+<details><summary>Do I have to use Claude Code?</summary><div class="a"><p>No. The terminal, the ticket system, git history, and the team view work with any tool. Session observation, the context map, and the usage gauge are the parts that depend on Claude Code being present, and they are inactive without it.</p></div></details>
+</div>
+
+<h2 id="requirements-faq">Installation and licensing</h2>
+<div class="qa">
+<details><summary>What does it require?</summary><div class="a"><p>macOS 14 or later. The <code>gh</code> CLI is optional and adds GitHub data. An OpenRouter key is optional and enables the language-model features.</p></div></details>
+<details><summary>How is it licensed?</summary><div class="a"><p>A one-time purchase with a license key. There is no subscription and no account to create. The key is verified against Gumroad's public endpoint, and Weald operates no server of its own for this purpose.</p></div></details>
+<details><summary>Does it work offline?</summary><div class="a"><p>Yes. License verification is offline-tolerant, so an activated copy continues to run without a network connection. Everything except the language-model features, GitHub enrichment, and the update check is local in any case.</p></div></details>
+<details><summary>Can I use it on more than one Mac?</summary><div class="a"><p>Activations are counted against the license. Activating on an additional machine consumes one; ordinary relaunches do not.</p></div></details>
+<details><summary>How do updates work?</summary><div class="a"><p>Weald checks a small public manifest at launch and shows a dismissable banner when a newer version exists. Nothing is installed automatically, and the check fails silently when offline.</p></div></details>
+</div>
+
+<h2 id="privacy">Data and privacy</h2>
+<div class="qa">
+<details><summary>Does my code leave my machine?</summary><div class="a"><p>Not unless you enable a language-model feature and supply your own key. Project scanning, git reading, session observation, the terminal, the context map, and the team view are entirely local. Weald has no backend that receives your project data.</p></div></details>
+<details><summary>What is sent when I do enable model features?</summary><div class="a"><p>Only the context assembled for the request in question: recent commits, open ticket titles, activity, and an excerpt of project documents, trimmed to a budget. Requests go to OpenRouter using your key. Where the system supports on-device inference, that engine is preferred and nothing is sent at all.</p></div></details>
+<details><summary>Where is my API key stored?</summary><div class="a"><p>In the system Keychain, and nowhere else. It is never written to a project file or to application preferences.</p></div></details>
+<details><summary>Does Weald modify my Claude Code data?</summary><div class="a"><p>No. Session files under <code>~/.claude/</code> are read only. Installing Weald changes nothing about how Claude Code behaves.</p></div></details>
+<details><summary>What does the companion application transmit?</summary><div class="a"><p>An encrypted, read-only snapshot on the local network, containing usage windows, git and team rollups, and the attention queue. Terminal output, file contents, diffs, prompts, and transcript text are excluded by design, and the companion cannot run anything on the Mac.</p></div></details>
+</div>
+
+<h2 id="tickets-faq">Tickets and agents</h2>
+<div class="qa">
+<details><summary>Where are tickets stored?</summary><div class="a"><p>In a visible <code>.weald/</code> directory inside each repository, as Markdown files with a YAML header. They are committed with your code, so they survive a clone and their history is your git history.</p></div></details>
+<details><summary>Can I edit a ticket by hand?</summary><div class="a"><p>Yes. The format is ordinary text and is designed to round-trip safely, so a file edited in your own editor and a file written by an agent are the same kind of file.</p></div></details>
+<details><summary>Will an AI create tickets without my approval?</summary><div class="a"><p>No. A model proposal is written to an ignored proposals directory and rendered as a draft. It becomes a real ticket only when you accept it, and the resulting ticket records that its origin was a proposal. Work an agent performs at your instruction is recorded without a gate, because you asked for it.</p></div></details>
+<details><summary>Do agents need Weald to be running?</summary><div class="a"><p>No. With the application open, changes arrive over the local MCP endpoint and update the interface immediately. With it closed, the same changes land as file writes and are replayed at next launch.</p></div></details>
+<details><summary>What if two agents edit the same ticket?</summary><div class="a"><p>Writes are atomic, performed as a temporary file followed by a rename, so a partial ticket is never observed. A writer checks the modification timestamp before overwriting to detect a conflict, and git history remains the final backstop.</p></div></details>
+<details><summary>Is the MCP endpoint exposed to the network?</summary><div class="a"><p>No. It binds to the loopback interface only and is unreachable from outside the machine.</p></div></details>
+</div>
+
+<h2 id="terminal-faq">Terminal</h2>
+<div class="qa">
+<details><summary>Is it a real terminal?</summary><div class="a"><p>Yes. Each pane runs a genuine login shell over a pseudo-terminal, compatible with <code>xterm-256color</code>. Interactive programs behave as they do in any other terminal.</p></div></details>
+<details><summary>Can I use my existing terminal instead?</summary><div class="a"><p>Yes. Quick Send hands a session off to your preferred external terminal application. The embedded terminal exists for staying inside Weald, not for replacing what you already use.</p></div></details>
+<details><summary>Do sessions survive switching views?</summary><div class="a"><p>Yes. Sessions are owned by a process-wide registry keyed by project rather than by the view showing them, so moving between tabs and projects leaves shells and scrollback intact.</p></div></details>
+<details><summary>Will Weald intercept my keystrokes?</summary><div class="a"><p>Only the shortcuts in the reference table. Everything else reaches the shell untouched, so editors and interactive tools are unaffected.</p></div></details>
+<details><summary>Does it change my shell configuration?</summary><div class="a"><p>Only if you ask it to. When you do, the original file is backed up first and every line Weald writes is confined to a delimited managed block that can be removed cleanly.</p></div></details>
+</div>
+
+<div class="note"><p>A question that is not answered here can be raised at <a href="https://x.com/weald_app">@weald_app</a>.</p></div>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

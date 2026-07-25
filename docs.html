@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald Documentation</title>
+<meta name="description" content="What Weald is, how it works, and where to begin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="on">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Documentation</p>
+<h1 class="page">Weald in brief</h1>
+<p class="lede">Weald is a native macOS application that combines a terminal with a mission-control view of agent-driven development. It observes the repositories you work in, the Claude Code sessions running against them, their git history, and a plain-file ticket system, and presents all of it on one surface.</p>
+
+<h2 id="what">What the application does</h2>
+<p>Most of the work in an agent-assisted project happens in a terminal, and the record of that work is scattered across shell sessions, commit history, and whatever notes were kept along the way. Weald consolidates those sources. It hosts the terminal sessions itself, so it can observe them; it reads git and Claude Code session data directly from disk, so it requires no instrumentation of your projects; and it stores task state as ordinary files inside each repository, so that state is versioned alongside the code it describes.</p>
+<p>Four capabilities follow from that arrangement.</p>
+<ul>
+  <li><strong>An embedded terminal.</strong> Real login shells with tabs, split panes, and a first-party terminal engine, running inside the application window per project.</li>
+  <li><strong>Overwatch.</strong> A full-screen view of every live session for a project, each one still interactive.</li>
+  <li><strong>A file-based ticket system.</strong> Tasks are <code>.wealdticket</code> files committed to the repository, readable and writable by people and by agents.</li>
+  <li><strong>An MCP server.</strong> Agents report status, raise questions, and update tickets through a local endpoint.</li>
+</ul>
+
+<h2 id="principles">Design principles</h2>
+<p><strong>Files are the source of truth.</strong> Ticket and project state live in a visible, git-tracked <code>.weald/</code> directory in each repository. There is no database and no hosted backend. State survives a clone to another machine, ticket history is git history, and any tool that can read a file can read a Weald ticket.</p>
+<p><strong>Agents do not depend on the application being open.</strong> When Weald is running, agent writes arrive over MCP and update the interface immediately. When it is not running, the same writes land as file changes, and Weald replays them at next launch.</p>
+<p><strong>Inference is separated from record.</strong> Work an agent performs at your instruction is recorded without a gate. Suggestions produced by a language model are staged as drafts and are never written to disk until you approve them. Every ticket carries an <code>origin</code> field recording which of the two it was.</p>
+<p><strong>Nothing leaves the machine unless you configure it to.</strong> Project scanning, git reading, session observation, the terminal, and the context map are entirely local. Network access occurs only for license verification, the update check, and any language-model features you enable with your own key.</p>
+
+<h2 id="requirements">Requirements</h2>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td>Operating system</td><td>macOS 14 or later</td></tr>
+  <tr><td>Distribution</td><td>Signed and notarized disk image</td></tr>
+  <tr><td>License</td><td>One-time purchase, verified against Gumroad</td></tr>
+  <tr><td>Optional</td><td><code>git</code> for history, the <code>gh</code> CLI for GitHub data, an OpenRouter key for language-model features</td></tr>
+</table>
+
+<h2 id="where">Where to continue</h2>
+<div class="cards">
+  <a class="card glass" href="install.html"><h4>Install and first launch</h4><p>Download, licensing, adding projects, and the first-run walkthrough.</p></a>
+  <a class="card glass" href="terminal.html"><h4>Terminal</h4><p>Tabs, split panes, session persistence, tab grouping, and the console.</p></a>
+  <a class="card glass" href="overwatch.html"><h4>Overwatch</h4><p>The full-screen session view, its modes, and the idle screensaver.</p></a>
+  <a class="card glass" href="tickets.html"><h4>Tickets and agents</h4><p>The ticket format, the MCP tool surface, and agent registration.</p></a>
+  <a class="card glass" href="reference.html"><h4>Reference</h4><p>Keyboard shortcuts, file locations, and settings.</p></a>
+  <a class="card glass" href="faq.html"><h4>Questions and answers</h4><p>Direct answers to the questions asked most often.</p></a>
+</div>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

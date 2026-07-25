@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald Tickets and Agents</title>
+<meta name="description" content="The file-based ticket format and the local MCP server for agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="on">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Feature</p>
+<h1 class="page">Tickets and agents</h1>
+<p class="lede">Weald's task system is a set of plain files inside your repository, and its agent interface is a local MCP server that reads and writes those same files. Both people and agents work against one record.</p>
+
+<h2 id="layout">On-disk layout</h2>
+<p>Each project holds a visible, git-tracked <code>.weald/</code> directory.</p>
+<pre><code>.weald/
+  project.json          project identity and links to documents
+  tickets/              accepted tickets
+    WEALD-001.wealdticket
+  proposals/            model-staged drafts, not committed
+  events.log            append-only activity feed
+  dismissed.json        remembered dismissals</code></pre>
+<p>Everything is committed except <code>proposals/</code>, which is ignored by git because a proposal is speculation and must not enter shared history before a person accepts it.</p>
+
+<h2 id="format">The ticket format</h2>
+<p>A <code>.wealdticket</code> file is Markdown with a YAML header. The format was chosen so that a ticket reads well in a text editor, produces a clean diff, and requires no tooling for an agent to parse. The custom extension exists so that macOS can associate an icon and file type with it.</p>
+<pre><code>---
+id: WEALD-001
+title: Add model fetching from OpenRouter
+status: in_progress        # backlog | todo | in_progress | review | done | blocked
+assignee: claude
+priority: P2               # P0 | P1 | P2 | P3
+created: 2026-07-21T10:00:00Z
+updated: 2026-07-21T14:30:00Z
+origin: agent              # human | agent | weald-llm
+depends_on: [WEALD-000]
+labels: [networking, mvp]
+---
+
+## Context
+Why this ticket exists.
+
+## Acceptance criteria
+- [ ] Fetches the model list
+- [ ] Caches locally with refresh
+
+## Activity
+- 14:30 claude: implemented fetch and caching</code></pre>
+<p>The <code>origin</code> field records provenance, distinguishing a ticket written by a person, one written by an agent performing sanctioned work, and one accepted from a model proposal. The interface always shows which it was.</p>
+<p>A ticket may additionally be marked as a keystone, which designates it as a north-star item for the project and steers what Weald suggests next.</p>
+
+<h2 id="writes">Concurrent writes</h2>
+<p>Several agents may hold the same ticket at once. Every write is performed as a temporary file followed by a rename, so a reader never observes a half-written ticket, and a writer checks the <code>updated</code> timestamp before overwriting in order to detect a clobber. Because tickets are tracked by git, history remains the final backstop.</p>
+<p>Activity is recorded in <code>events.log</code> as one JSON object per line, which makes the file cheap to append to and to tail, and means it never has to be rewritten.</p>
+
+<h2 id="mcp">The MCP server</h2>
+<p>Weald is the MCP server and the agent is the client. The endpoint is <code>http://127.0.0.1:47921/mcp</code> over streamable HTTP, bound to the loopback interface only. There is no authentication token because the socket is not reachable from outside the machine.</p>
+<table>
+  <tr><th>Tool</th><th>Purpose</th></tr>
+  <tr><td><code>weald_list_tickets</code></td><td>List tickets, optionally filtered by status</td></tr>
+  <tr><td><code>weald_get_ticket</code></td><td>Return one ticket in full</td></tr>
+  <tr><td><code>weald_create_ticket</code></td><td>Create a ticket</td></tr>
+  <tr><td><code>weald_update_status</code></td><td>Change status and append an activity note</td></tr>
+  <tr><td><code>weald_log_event</code></td><td>Append an entry to the timeline</td></tr>
+  <tr><td><code>weald_set_status</code></td><td>Declare the agent's current state and progress</td></tr>
+  <tr><td><code>weald_clear_status</code></td><td>Clear the agent's rows</td></tr>
+  <tr><td><code>weald_ask</code></td><td>Raise a question that requires a person</td></tr>
+  <tr><td><code>weald_resolve_ask</code></td><td>Mark a raised question as resolved</td></tr>
+  <tr><td><code>weald_notify</code></td><td>Send a notification</td></tr>
+</table>
+<p>When the application is running, tool calls change its state directly and the interface updates at once. When it is not running, the same changes land as file writes and are replayed at next launch. Agents therefore never depend on Weald being open; the file layer is the contract and the live connection is only an optimization.</p>
+
+<h2 id="register">Registering an agent</h2>
+<pre><code>claude   mcp add --transport http weald http://127.0.0.1:47921/mcp
+openclaw mcp add weald --transport streamable-http --url http://127.0.0.1:47921/mcp
+hermes   mcp add weald --url http://127.0.0.1:47921/mcp</code></pre>
+<p>Claude Code stores the entry in <code>~/.claude.json</code> and lists it with <code>claude mcp list</code>. Some gateways cache tool schemas and must be restarted after registration. Hermes exposes the tools under an <code>mcp_weald_</code> prefix, with hyphens and dots converted to underscores, which is worth knowing if an agent reports that a tool cannot be found.</p>
+
+<h2 id="status">Agent status and the attention queue</h2>
+<p>Status declared by an agent is kept separately from status inferred from transcripts, and declared status is shown above inferred status. Each entry is keyed by agent and project, so two agents on one repository occupy two rows and one agent across repositories occupies a row per repository. Entries carry a state, a message, optional progress, and an expiry, so an agent that crashes mid-task expires rather than remaining pinned as working.</p>
+<p>Everything awaiting a person is merged into a single ranked queue drawn from three sources: blocked and in-review tickets in the repository, GitHub items retrieved through the <code>gh</code> CLI, and questions raised by agents. Ranking places a stopped agent first, because it is the only item in the queue consuming time while it waits, then requested changes and review requests, then blocked tickets and assigned work. Within one kind, the item that has waited longest rises. The top of the same queue appears in the menu-bar panel.</p>
+
+<h2 id="llm">Language-model features</h2>
+<p>Language-model features are optional and require an OpenRouter key, which is stored in the system Keychain and nowhere else. Where the local system supports on-device inference, that engine is preferred and no request leaves the machine at all.</p>
+<p>The model is given exactly two jobs. It <strong>summarizes</strong>, producing a short account of what moved, what has stalled, and what is waiting on a person. Because a summary is read-only, it needs no approval, and it is cached rather than regenerated on every file change.</p>
+<p>It also <strong>proposes</strong>. A proposal is written to <code>.weald/proposals/</code>, rendered as a visually distinct draft, and never becomes a real ticket until accepted. Each draft is editable in place, carries a line stating what it was generated from, and can be accepted, edited, or dismissed. Existing open tickets are supplied to the model with an instruction not to duplicate them, and dismissals are remembered so that the same suggestion does not return.</p>
+<p>Generation is triggered deliberately: by a button, or quietly staged behind a badge after a session ends. Nothing is written to disk without a click either way.</p>
+
+<h2 id="team">Team and history</h2>
+<p>Weald answers who is working on what, and what is stuck, from version control alone, so the view is useful in a repository with no remote at all. It reads commit history with authorship and per-commit churn, branch tips, and how far each branch has diverged from the default branch. Where the <code>gh</code> CLI is available, pull requests and contributor identities are added on top. Results are published in stages as they arrive rather than after a single blocking call, so the view fills in progressively.</p>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald Overwatch</title>
+<meta name="description" content="The full-screen live session view, its modes, and the idle screensaver.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="on">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Feature</p>
+<h1 class="page">Overwatch</h1>
+<p class="lede">Overwatch turns the entire screen into a view of one project's live sessions. Every terminal shown remains a running, typeable shell; the view is a presentation of the sessions, not a summary of them.</p>
+
+<h2 id="entering">Entering and leaving</h2>
+<p>Overwatch is opened from the menu-bar panel whenever a project is selected. The panel closes and the overlay expands to cover the desktop, and it collapses the same way on dismissal.</p>
+<p>The view remembers where it was left. The presented project and the centered session are recorded on every change rather than only at teardown, so the position survives a quit or an unexpected termination. On the next entry, Weald returns to the last project when it still exists, and to the session that was centered, falling back to whichever terminal was most recently in use.</p>
+
+<h2 id="modes">Modes</h2>
+<p>A dock along the left edge switches the surface between five modes, each bound to a shortcut on the keyboard's bottom row, ordered left to right to match the dock's order from top to bottom.</p>
+<table>
+  <tr><th>Mode</th><th>Shortcut</th><th>Purpose</th></tr>
+  <tr><td>Operate</td><td><code>⌥Z</code></td><td>The live terminals</td></tr>
+  <tr><td>Plan</td><td><code>⌥X</code></td><td>Board and upcoming work</td></tr>
+  <tr><td>Daily</td><td><code>⌥C</code></td><td>The day's activity</td></tr>
+  <tr><td>Notes</td><td><code>⌥V</code></td><td>Project notes</td></tr>
+  <tr><td>Entertainment</td><td><code>⌥B</code></td><td>Ambient surface</td></tr>
+</table>
+<p>Projects are switched with <code>⌥1</code> through <code>⌥9</code>. Sessions are stepped through with <code>⇧←</code> and <code>⇧→</code>, and the surface is dismissed with <code>Esc</code> or <code>⌘.</code>.</p>
+
+<h2 id="inspector">File inspector</h2>
+<p>A file browser occupies the right edge, mirroring the mode dock on the left. A grip hugs the edge, moving the pointer into a narrow hot zone fans the panel out, and leaving retracts it after a short grace delay so that an overshooting cursor does not close it. Clicking the grip pins the panel open. <code>⌥/</code> toggles the pinned state and seeds the selection on the first row, so the browser can be driven entirely from the keyboard.</p>
+
+<h2 id="screensaver">Idle screensaver</h2>
+<p>Overwatch can present itself when the Mac has been idle. Weald reads the same system-wide input-idle signal the operating system's own screensaver uses, and after a configurable interval between thirty seconds and thirty minutes it opens Overwatch on the most recently used project against an animated backdrop. The first keypress or pointer movement dismisses it.</p>
+<p>One rule governs the interaction: Weald dismisses only the presentations it opened itself. An Overwatch session you opened by hand is never taken away from you.</p>
+<p>The animation is written to be inexpensive. It is a single canvas capped at thirty frames per second with a fixed element count, drawing analytic functions of wall-clock time rather than running a simulation. Dropped frames cost nothing, and rendering stops entirely when the surface closes.</p>
+
+<h2 id="instructor">Instructor mode</h2>
+<p>An optional setting makes every keyboard shortcut announce itself as a brief chip in the corner of the Overwatch surface, showing both the keys pressed and the action taken. It is intended for demonstrations, pairing, and screen recordings, where the viewer cannot see the keyboard. It is off by default and does nothing when disabled.</p>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

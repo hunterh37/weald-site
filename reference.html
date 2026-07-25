@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Weald Reference</title>
+<meta name="description" content="Keyboard shortcuts, file locations, and settings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="on">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Reference</p>
+<h1 class="page">Reference</h1>
+<p class="lede">Keyboard shortcuts, file locations, and the settings that change how Weald behaves.</p>
+
+<h2 id="terminal-keys">Terminal shortcuts</h2>
+<p>Terminal bindings are defined in one place in the application, so the embedded terminal, minimal mode, and Overwatch all obey the same table and the on-screen cheat sheet cannot drift from it. Any keystroke that is not listed reaches the shell untouched, which means typing inside <code>vim</code>, <code>claude</code>, or any other program is never intercepted.</p>
+<table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>⌘T</code></td><td>New terminal</td></tr>
+  <tr><td><code>⌘W</code></td><td>Close pane, then tab</td></tr>
+  <tr><td><code>⌘D</code></td><td>Split the active tab, up to four panes</td></tr>
+  <tr><td><code>⌘Z</code></td><td>Reopen the last closed terminal</td></tr>
+  <tr><td><code>⌘[</code> and <code>⌘]</code></td><td>Previous and next terminal</td></tr>
+  <tr><td><code>⌘1</code> to <code>⌘9</code></td><td>Jump to terminal, nine selects the last</td></tr>
+  <tr><td><code>⌘+</code> and <code>⌘−</code></td><td>Font larger and smaller</td></tr>
+  <tr><td><code>⌘0</code></td><td>Reset font size</td></tr>
+</table>
+
+<h3>Line editing</h3>
+<p>These map to the standard readline sequences and behave identically in every terminal surface.</p>
+<table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>⌘←</code> and <code>⌘→</code></td><td>Start and end of line</td></tr>
+  <tr><td><code>⌥←</code> and <code>⌥→</code></td><td>Back and forward one word</td></tr>
+  <tr><td><code>⌘⌫</code></td><td>Delete to start of line</td></tr>
+  <tr><td><code>⌥⌫</code></td><td>Delete previous word</td></tr>
+  <tr><td><code>⌘⌦</code></td><td>Delete to end of line</td></tr>
+  <tr><td><code>⌥⌦</code></td><td>Delete next word</td></tr>
+  <tr><td><code>⌘K</code></td><td>Clear screen</td></tr>
+  <tr><td><code>⌘⇧K</code></td><td>Clear screen and scrollback</td></tr>
+</table>
+
+<h2 id="app-keys">Application shortcuts</h2>
+<table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>⌘⇧K</code></td><td>Toggle the console and mission control</td></tr>
+  <tr><td><code>⇧⌘M</code></td><td>Leave minimal mode</td></tr>
+  <tr><td><code>⌥1</code> to <code>⌥9</code></td><td>Switch project, in minimal mode and in Overwatch</td></tr>
+  <tr><td><code>⌥Z ⌥X ⌥C ⌥V ⌥B</code></td><td>Overwatch modes, in dock order</td></tr>
+  <tr><td><code>⌥/</code></td><td>Pin or unpin the file inspector</td></tr>
+  <tr><td><code>⇧←</code> and <code>⇧→</code></td><td>Step through Overwatch sessions</td></tr>
+  <tr><td><code>Esc</code> or <code>⌘.</code></td><td>Dismiss Overwatch</td></tr>
+</table>
+
+<h2 id="paths">File locations</h2>
+<table>
+  <tr><th>Path</th><th>Contents</th></tr>
+  <tr><td><code>&lt;project&gt;/.weald/tickets/</code></td><td>Accepted tickets, committed</td></tr>
+  <tr><td><code>&lt;project&gt;/.weald/proposals/</code></td><td>Staged drafts, ignored by git</td></tr>
+  <tr><td><code>&lt;project&gt;/.weald/events.log</code></td><td>Append-only activity feed</td></tr>
+  <tr><td><code>&lt;project&gt;/.weald/project.json</code></td><td>Project identity and document links</td></tr>
+  <tr><td><code>&lt;project&gt;/.weald/next-actions.json</code></td><td>Suggestion state and dismissals, ignored by git</td></tr>
+  <tr><td><code>~/.claude/</code></td><td>Claude Code session data, read only</td></tr>
+  <tr><td><code>~/.weald/config.toml</code></td><td>Console configuration</td></tr>
+  <tr><td><code>~/Library/Application Support/Weald/</code></td><td>Cached usage state</td></tr>
+  <tr><td>System Keychain</td><td>OpenRouter key, if one is configured</td></tr>
+</table>
+<div class="note"><p>Frequent changes to <code>.weald/activity.json</code> appearing in <code>git status</code> are expected while the application is running.</p></div>
+
+<h2 id="settings">Notable settings</h2>
+<p><strong>Usage gauge.</strong> An optional readout of Claude Code usage, drawn as thin progress lines around the notch on a MacBook that has one, or as a floating pill on a Mac that does not. It reads local transcripts on a short interval, deduplicates messages, aggregates tokens per account, and computes rolling five-hour and weekly windows. Multiple accounts are tracked separately, including switches between them over time.</p>
+<p><strong>Battery behavior.</strong> Animation and polling can be reduced when running on battery.</p>
+<p><strong>Accent color.</strong> One store drives the color of the entire interface, including the first-run walkthrough, which recolors as the choice is made.</p>
+<p><strong>Terminal appearance.</strong> Font and size apply to every pane at once. A monospace font can be selected independently for the rest of the interface.</p>
+<p><strong>Companion.</strong> Weald can publish a small read-only encrypted snapshot on the local network for a companion iPhone application, paired once by QR code. The snapshot carries usage windows, git and team rollups, and the attention queue. It never carries terminal output, file contents, diffs, prompts, or transcript text, and it exposes no way to run anything on the Mac.</p>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>

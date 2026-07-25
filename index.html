@@ -74,6 +74,12 @@ p.sub{margin-top:20px;font-family:'JetBrains Mono',ui-monospace,monospace;
   box-shadow:0 18px 56px rgba(52,211,153,.38),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.2)}
 .buy .amt{opacity:.75;font-weight:500}
 
+p.docs{margin-top:22px;display:flex;justify-content:center;gap:14px;align-items:center;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;letter-spacing:.04em}
+p.docs a{color:rgba(235,242,240,.6);text-decoration:none;transition:color .18s}
+p.docs a:hover{color:#7DE9C0}
+p.docs span{color:rgba(235,242,240,.25)}
+
 .social{position:fixed;bottom:calc(26px + env(safe-area-inset-bottom));left:0;right:0;z-index:2;display:flex;justify-content:center}
 .social a{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#fff;opacity:.85;
   transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s,opacity .25s}
@@ -91,6 +97,7 @@ p.sub{margin-top:20px;font-family:'JetBrains Mono',ui-monospace,monospace;
     <button class="copy" id="copyBtn">copy</button>
   </div>
   <a class="buy glass" href="https://wealdapp.gumroad.com/l/ftxdxa">Purchase lifetime license <span class="amt">· $10</span></a>
+  <p class="docs"><a href="docs.html">Documentation</a><span>·</span><a href="faq.html">FAQ</a></p>
 </main>
 <div class="social"><a class="glass" href="https://x.com/weald_app" target="_blank" rel="noopener" aria-label="X (Twitter)">
 <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>

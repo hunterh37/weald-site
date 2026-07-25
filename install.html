@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030604">
+<title>Install Weald</title>
+<meta name="description" content="Download, licensing, first launch, and adding projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<header class="bar"><div class="bar-in">
+  <a class="brand" href="index.html">WEALD</a>
+  <nav>
+    <a href="docs.html" class="">Overview</a>
+    <a href="install.html" class="on">Install</a>
+    <a href="terminal.html" class="">Terminal</a>
+    <a href="overwatch.html" class="">Overwatch</a>
+    <a href="tickets.html" class="">Tickets &amp; agents</a>
+    <a href="reference.html" class="">Reference</a>
+    <a href="faq.html" class="">FAQ</a>
+  </nav>
+  <a class="get" href="https://wealdapp.gumroad.com/l/ftxdxa">Get Weald</a>
+</div></header>
+<main class="wrap">
+<p class="eyebrow">Getting started</p>
+<h1 class="page">Install and first launch</h1>
+<p class="lede">Weald is distributed as a signed and notarized disk image. Installation is a copy into the Applications folder, followed by license activation and a short setup walkthrough.</p>
+
+<h2 id="download">Download</h2>
+<p>Download the disk image directly, or retrieve it from the command line.</p>
+<pre><code>curl -LO https://hunterh37.github.io/weald-site/Weald.dmg</code></pre>
+<p>Open the image and drag <strong>Weald</strong> into <code>/Applications</code>. Because the build is notarized, no security override is required on first open.</p>
+
+<h2 id="license">License activation</h2>
+<p>Weald is a one-time purchase. On first launch the application presents an activation panel and remains blocked until a valid key is entered. The key is issued at purchase and verified against Gumroad's public license endpoint; there is no account to create and no server operated by Weald.</p>
+<p>Later launches re-verify the key without incrementing the activation count. Verification is offline-tolerant: if the machine has no network connection, a previously activated copy continues to run.</p>
+
+<h2 id="first-run">First-run walkthrough</h2>
+<p>After activation, a short and fully skippable walkthrough runs once. It covers three steps: a one-line introduction, an accent-color picker that recolors the interface as you choose, and a live terminal in which the keyboard shortcuts can be tried immediately. An optional final step offers to configure a modern <code>zsh</code> environment.</p>
+<p>The walkthrough can be replayed at any time from <strong>Settings, Getting started, Replay intro</strong>.</p>
+
+<h2 id="shell">Optional shell setup</h2>
+<p>The shell step writes a curated configuration into <code>~/.zshrc</code> using well-established open-source tools, among them Starship, <code>zsh-autosuggestions</code>, <code>zsh-syntax-highlighting</code>, <code>zoxide</code>, and <code>fzf</code>. Two safeguards apply without exception: the original file is backed up before any write, and everything Weald writes is confined to a clearly delimited managed block that can be removed later without disturbing your own configuration. The same editor is available afterwards in Settings, with a live preview of the file that will be produced.</p>
+
+<h2 id="projects">Adding projects</h2>
+<p>Weald finds work in three ways. It scans the root folders you configure for directories containing a <code>.weald/</code> folder, or a <code>.git</code> directory accompanied by a project document. Folders can also be dragged into the application directly. Nested repositories inside a scanned root are discovered as separate projects. The resulting list is persisted between launches.</p>
+<p>Once a project is present, Weald reads its git history by polling <code>git log</code> and watching <code>.git/logs/HEAD</code>. No hook installation is required. An optional <code>post-commit</code> hook is offered for instantaneous updates, but the application is designed to work fully without it.</p>
+
+<h2 id="sessions">Claude Code sessions</h2>
+<p>If Claude Code is installed, Weald reads its session data from <code>~/.claude/</code> to determine which projects have an active or recent session, when each was last active, and how many tokens have been consumed. This is a read of files already written by Claude Code. Weald does not modify them, and installing Weald changes nothing about how Claude Code runs.</p>
+
+<h2 id="updates">Updates</h2>
+<p>On launch, Weald fetches a small public manifest and compares its version to the running build. If a newer release exists, a dismissable banner appears with a download link. There is no automatic installer and no background updater; the check fails silently when offline.</p>
+
+<div class="note"><p>Everything above except license verification and the update check runs locally. Adding a project does not upload it, index it remotely, or send any part of it anywhere.</p></div>
+</main>
+<footer>
+  Weald for macOS
+  <span style="opacity:.4">·</span>
+  <a href="docs.html">Documentation</a>
+  <a href="faq.html">FAQ</a>
+  <a href="https://x.com/weald_app" target="_blank" rel="noopener">X</a>
+  <a href="https://wealdapp.gumroad.com/l/ftxdxa">License</a>
+</footer>
+</body>
+</html>
