@@ -1,0 +1,48 @@
+{
+  "actions" : [
+    {
+      "colorHex" : "FFB84D",
+      "extraTools" : [
+
+      ],
+      "id" : "seed-perf-scan",
+      "name" : "Perf scan",
+      "prompt" : "Audit this repository for real performance problems: hot paths doing redundant work, O(n^2) loops over collections that grow, main-thread file or network I\/O, views that rebuild more than they need to, and anything that allocates per frame.\n\nRead enough of the code to be specific. Ignore hypotheticals and micro-optimizations that would not be measurable.\n\nFor each real finding, create a Weald ticket with a P1\/P2 priority, the label \"perf\", a title naming the symptom, and a body that names the file, the type, the current behavior, why it costs, and the fix you would make. If you find nothing worth filing, say so instead of inventing work.",
+      "seeded" : true,
+      "skipPermissions" : false,
+      "symbol" : "gauge.with.dots.needle.67percent",
+      "timeoutMinutes" : 25
+    },
+    {
+      "colorHex" : "B399FF",
+      "extraTools" : [
+
+      ],
+      "id" : "seed-ticket-scan",
+      "name" : "Suggested tickets",
+      "prompt" : "Survey this repository and propose the highest-value work to do next.\n\nRead the README, any PRD or specs, the recent git log, and the existing Weald tickets (list them first so you do not duplicate anything). Look for half-finished features, missing tests around risky logic, rough edges in the UX, and TODO or FIXME comments that actually matter.\n\nFile between three and six Weald tickets, each with a crisp imperative title and a body an agent could pick up cold: the files involved, the current behavior, the desired behavior, and the acceptance check. Prioritize honestly, P1 for things that are broken or blocking and P3 for polish.",
+      "seeded" : true,
+      "skipPermissions" : false,
+      "symbol" : "sparkles.rectangle.stack",
+      "timeoutMinutes" : 25
+    },
+    {
+      "colorHex" : "5EE6C5",
+      "extraTools" : [
+
+      ],
+      "id" : "seed-epic-scan",
+      "name" : "Epic tickets",
+      "prompt" : "Derive this project's epics: the small set of load-bearing arcs that, if finished, move the product furthest toward what it is trying to be. Each one becomes a GitHub epic issue that later tickets hang off as sub-issues, so scope them as parents of future work rather than as work themselves.\n\nAnalyze hard before you write anything:\n\n1. Read the product intent first. PRD.md if it exists, then    everything under specs\/, then README.md and CLAUDE.md. Note the    stated goals, non-goals, milestones, and success criteria.\n2. Read the code that backs those claims. Walk the source tree,    open the files that own each major surface, and judge what is    actually built versus merely sketched. Look for the seams: the    subsystem every future feature has to route through, the model    that is wrong at the center, the milestone with no code under it.\n3. List the existing Weald tickets so an epic never restates work    already filed, and note which open tickets would sit under each    epic you are about to propose. Epics sit above ordinary    tickets: if something is a single afternoon's task, it is not an    epic.\n4. Cross-reference the two. An epic is where the PRD's intent and    the codebase's reality are furthest apart, weighted by how much    else depends on closing that gap.\n\nThen file between three and five tickets with weald_create_ticket, each with epic set to true. For each one: an imperative title naming the arc, priority P1 for the ones blocking everything else, and a body with the intent it serves (cite the PRD or spec section), the current state in the code (name the files and types), the target state, why it is load-bearing (what unblocks), the existing tickets that belong under it, and how you would know it is done.\n\nDo not pad the list to reach three. Fewer, truer epics beat a full set of guesses.",
+      "seeded" : true,
+      "skipPermissions" : false,
+      "symbol" : "square.stack.3d.up.fill",
+      "timeoutMinutes" : 30
+    }
+  ],
+  "seeded" : [
+    "seed-perf-scan",
+    "seed-ticket-scan",
+    "seed-epic-scan"
+  ]
+}
