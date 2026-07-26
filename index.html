@@ -60,9 +60,35 @@ p.sub{margin-top:20px;font-family:'JetBrains Mono',ui-monospace,monospace;
 .glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
   background:radial-gradient(120% 80% at 50% -20%,rgba(255,255,255,.18),transparent 60%)}
 
-.curl{margin:40px auto 0;display:inline-flex;align-items:center;gap:14px;max-width:92vw;
-  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;text-align:left;
-  padding:15px 17px;cursor:pointer}
+/* ── primary CTA: download for macOS ────────────────────── */
+.cta{margin-top:44px;display:flex;flex-direction:column;align-items:center}
+.dl{display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  font-family:'Space Grotesk',system-ui,sans-serif;font-size:16.5px;font-weight:700;
+  letter-spacing:-.01em;color:#04120C;text-decoration:none;cursor:pointer;
+  padding:17px 30px;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,#5CF0B6,#22C48C);
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow:0 12px 38px rgba(52,211,153,.34),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(0,0,0,.14);
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,filter .22s}
+.dl:hover{transform:translateY(-2px);filter:brightness(1.06);
+  box-shadow:0 20px 54px rgba(52,211,153,.46),inset 0 1px 0 rgba(255,255,255,.7)}
+.dl:active{transform:translateY(0)}
+.dl:focus-visible{outline:2px solid #7DE9C0;outline-offset:3px}
+.dl svg{width:19px;height:19px;fill:currentColor;flex-shrink:0}
+.meta{margin-top:13px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;
+  letter-spacing:.03em;color:rgba(235,242,240,.42)}
+.meta b{font-weight:500;color:rgba(235,242,240,.62)}
+
+.alt{margin-top:26px;display:flex;align-items:center;gap:12px;width:min(560px,92vw);
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(235,242,240,.28)}
+.alt::before,.alt::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent)}
+
+.curl{margin:18px auto 0;display:inline-flex;align-items:center;gap:14px;max-width:92vw;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;text-align:left;
+  padding:13px 15px;cursor:pointer;opacity:.82}
+.curl:hover{opacity:1}
 .curl:hover{transform:translateY(-1px);border-color:rgba(52,211,153,.45)}
 .curl code{white-space:nowrap;overflow-x:auto;color:#EBF2F0}
 .curl .p{color:#34D399}.curl .f{color:rgba(235,242,240,.45)}
@@ -72,16 +98,16 @@ p.sub{margin-top:20px;font-family:'JetBrains Mono',ui-monospace,monospace;
 .copy:hover{background:rgba(52,211,153,.16);border-color:rgba(52,211,153,.5);color:#7DE9C0}
 .copy.done{background:#34D399;color:#06110C;border-color:#34D399}
 
-.buy{display:flex;width:min(420px,92vw);margin:16px auto 0;align-items:center;justify-content:center;gap:10px;
-  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;font-weight:600;
-  color:#EAFFF7;text-decoration:none;cursor:pointer;padding:16px 22px;overflow:hidden;
-  background:linear-gradient(160deg,rgba(52,211,153,.34),rgba(52,211,153,.12));
-  border:1px solid rgba(52,211,153,.5);
-  box-shadow:0 10px 40px rgba(52,211,153,.22),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.2)}
-.buy::before{background:radial-gradient(120% 80% at 50% -20%,rgba(255,255,255,.35),transparent 55%)}
-.buy:hover{transform:translateY(-2px);border-color:rgba(52,211,153,.8);
-  box-shadow:0 18px 56px rgba(52,211,153,.38),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.2)}
-.buy .amt{opacity:.75;font-weight:500}
+.buy{display:inline-flex;margin:22px auto 0;align-items:center;justify-content:center;gap:9px;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;font-weight:600;
+  letter-spacing:.02em;color:rgba(235,242,240,.8);text-decoration:none;cursor:pointer;
+  padding:12px 20px;border-radius:12px;overflow:hidden;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.buy:hover{transform:translateY(-1px);color:#EAFFF7;
+  border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.12)}
+.buy:focus-visible{outline:2px solid #7DE9C0;outline-offset:3px}
+.buy .amt{opacity:.6;font-weight:500}
 
 p.docs{margin-top:30px;display:flex;justify-content:center;gap:14px;align-items:center;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;letter-spacing:.04em}
@@ -154,11 +180,21 @@ p.docs span{color:rgba(235,242,240,.25)}
 ╚███╔███╔╝███████╗██║  ██║███████╗██████╔╝
  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝ <span class="cursor"></span></pre></h1>
   <p class="sub">A new terminal for macOS</p>
-  <div class="curl glass" id="curl" title="Click to copy">
-    <code><span class="p">➜</span> curl -LO <span class="f">https://hunterh37.github.io/weald-site/</span>Weald-0.4.dmg</code>
-    <button class="copy" id="copyBtn">copy</button>
+  <div class="cta">
+    <a class="dl" href="Weald-0.4.dmg" download>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.75c0-2.3 1.87-3.4 1.95-3.45-1.06-1.56-2.72-1.77-3.3-1.79-1.4-.14-2.74.83-3.45.83-.72 0-1.81-.81-2.98-.79-1.53.02-2.95.89-3.74 2.27-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74s1.78.74 2.99.72c1.24-.02 2.03-1.13 2.79-2.24.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65Zm-2.26-6.7c.63-.76 1.05-1.82.93-2.87-.9.04-2 .6-2.65 1.36-.58.67-1.09 1.75-.95 2.78 1.01.08 2.03-.51 2.67-1.27Z"/></svg>
+      Download for macOS
+    </a>
+    <p class="meta"><b>Version 0.4</b> · Universal · 15 MB · .dmg</p>
+
+    <div class="alt">or install from the terminal</div>
+    <div class="curl glass" id="curl" title="Click to copy">
+      <code><span class="p">➜</span> curl -LO <span class="f">https://hunterh37.github.io/weald-site/</span>Weald-0.4.dmg</code>
+      <button class="copy" id="copyBtn">copy</button>
+    </div>
+
+    <a class="buy" href="https://wealdapp.gumroad.com/l/ftxdxa">Purchase lifetime license <span class="amt">· $10</span></a>
   </div>
-  <a class="buy glass" href="https://wealdapp.gumroad.com/l/ftxdxa">Purchase lifetime license <span class="amt">· $10</span></a>
   <p class="docs"><a href="docs.html">Documentation</a><span>·</span><a href="faq.html">FAQ</a></p>
 
   <div class="rule"><span>optional add-on</span></div>
