@@ -93,7 +93,7 @@ p.docs span{color:rgba(235,242,240,.25)}
   <h1>WEALD</h1>
   <p class="sub">A new terminal for macOS</p>
   <div class="curl glass" id="curl" title="Click to copy">
-    <code><span class="p">➜</span> curl -LO <span class="f">https://hunterh37.github.io/weald-site/</span>Weald.dmg</code>
+    <code><span class="p">➜</span> curl -LO <span class="f">https://hunterh37.github.io/weald-site/</span>Weald-0.4.dmg</code>
     <button class="copy" id="copyBtn">copy</button>
   </div>
   <a class="buy glass" href="https://wealdapp.gumroad.com/l/ftxdxa">Purchase lifetime license <span class="amt">· $10</span></a>
@@ -104,7 +104,7 @@ p.docs span{color:rgba(235,242,240,.25)}
 </a></div>
 
 <script>
-const cmd='curl -LO https://hunterh37.github.io/weald-site/Weald.dmg';
+const cmd='curl -LO https://hunterh37.github.io/weald-site/Weald-0.4.dmg';
 const btn=document.getElementById('copyBtn');
 document.getElementById('curl').addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText(cmd);btn.textContent='copied ✓';btn.classList.add('done');
