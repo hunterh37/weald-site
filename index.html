@@ -145,7 +145,9 @@ p.docs span{color:rgba(235,242,240,.25)}
   font-size:10.5px;letter-spacing:.1em;color:rgba(235,242,240,.38)}
 
 .tf{margin:22px auto 0;display:inline-flex;align-items:center;gap:12px;
-  padding:12px 16px;border-radius:14px;cursor:default}
+  padding:12px 16px;border-radius:14px;text-decoration:none;
+  transition:transform .18s ease,border-color .18s ease}
+.tf:hover{transform:translateY(-1px);border-color:rgba(52,211,153,.45)}
 .tf .tf-icon{width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;border-radius:8px;
   background:linear-gradient(160deg,rgba(52,211,153,.3),rgba(52,211,153,.08));
   border:1px solid rgba(52,211,153,.4)}
@@ -155,11 +157,11 @@ p.docs span{color:rgba(235,242,240,.25)}
 .tf .tf-sub{margin-top:3px;font-size:10.5px;color:rgba(235,242,240,.45)}
 .tf .soon{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
   font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;color:#FFD9A0;
-  border:1px solid rgba(255,196,110,.42);background:rgba(255,196,110,.12);
+  letter-spacing:.1em;text-transform:uppercase;color:#B6F5DA;
+  border:1px solid rgba(52,211,153,.42);background:rgba(52,211,153,.12);
   border-radius:999px;padding:5px 10px}
-.tf .soon::before{content:"";width:6px;height:6px;border-radius:50%;background:#FFC46E;
-  box-shadow:0 0 8px rgba(255,196,110,.9);animation:pulse 1.8s ease-in-out infinite}
+.tf .soon::before{content:"";width:6px;height:6px;border-radius:50%;background:#34D399;
+  box-shadow:0 0 8px rgba(52,211,153,.9);animation:pulse 1.8s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35;transform:scale(.8)}}
 
 .social{margin:34px 0 calc(26px + env(safe-area-inset-bottom));position:relative;z-index:2;display:flex;justify-content:center}
@@ -233,14 +235,14 @@ p.docs span{color:rgba(235,242,240,.25)}
       </div>
     </div>
 
-    <div class="tf glass">
+    <a class="tf glass" href="https://testflight.apple.com/join/DMEQbr48" target="_blank" rel="noopener">
       <span class="tf-icon"><svg viewBox="0 0 24 24"><path d="M12 3v14"/><path d="M6.5 9.5 12 3l5.5 6.5"/><path d="M4 20h16"/></svg></span>
       <span class="tf-text">
         <span class="tf-title">Join the TestFlight beta</span>
         <span class="tf-sub">iOS &amp; watchOS companion</span>
       </span>
-      <span class="soon">Coming soon</span>
-    </div>
+      <span class="soon">Join beta</span>
+    </a>
   </section>
 </main>
 <div class="social"><a class="glass" href="https://x.com/weald_app" target="_blank" rel="noopener" aria-label="X (Twitter)">
