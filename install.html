@@ -17,6 +17,7 @@
   <a class="brand" href="index.html">WEALD</a>
   <nav>
     <a href="docs.html" class="">Overview</a>
+    <a href="download.html" class="">Download</a>
     <a href="install.html" class="on">Install</a>
     <a href="terminal.html" class="">Terminal</a>
     <a href="overwatch.html" class="">Overwatch</a>
@@ -32,8 +33,8 @@
 <p class="lede">Weald is distributed as a signed and notarized disk image. Installation is a copy into the Applications folder, followed by license activation and a short setup walkthrough.</p>
 
 <h2 id="download">Download</h2>
-<p>Download the disk image directly, or retrieve it from the command line.</p>
-<pre><code>curl -LO https://hunterh37.github.io/weald-site/Weald-0.57.dmg</code></pre>
+<p>Every build is published as a GitHub release on the Weald Protocol account. The <a href="download.html">downloads page</a> always resolves the newest one, for macOS and for Android. From the command line the permanent URL is version-free and always serves the latest release.</p>
+<pre><code>curl -L -o Weald.dmg https://github.com/Weald-Protocol/weald-mac/releases/latest/download/Weald.dmg</code></pre>
 <p>Open the image and drag <strong>Weald</strong> into <code>/Applications</code>. Because the build is notarized, no security override is required on first open.</p>
 
 <h2 id="license">License activation</h2>
@@ -55,7 +56,7 @@
 <p>If Claude Code is installed, Weald reads its session data from <code>~/.claude/</code> to determine which projects have an active or recent session, when each was last active, and how many tokens have been consumed. This is a read of files already written by Claude Code. Weald does not modify them, and installing Weald changes nothing about how Claude Code runs.</p>
 
 <h2 id="updates">Updates</h2>
-<p>On launch, Weald fetches a small public manifest and compares its version to the running build. If a newer release exists, a dismissable banner appears with a download link. There is no automatic installer and no background updater; the check fails silently when offline.</p>
+<p>On launch, Weald reads the latest GitHub release and compares its version to the running build. If a newer release exists, a dismissable banner appears with a download link. There is no automatic installer and no background updater; the check fails silently when offline.</p>
 
 <div class="note"><p>Everything above except license verification and the update check runs locally. Adding a project does not upload it, index it remotely, or send any part of it anywhere.</p></div>
 </main>

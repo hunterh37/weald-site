@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download Weald</title>
+<meta name="description" content="Download Weald for macOS and Android. Always the latest release, straight from GitHub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.github.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:#06110C;color:#EBF2F0;
+  font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── ambient field ──────────────────────────────────────── */
+.field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+.b1{width:52vw;height:52vw;left:-14vw;top:-18vw;background:radial-gradient(circle,rgba(52,211,153,.34),transparent 68%)}
+.b2{width:44vw;height:44vw;right:-12vw;top:22vh;background:radial-gradient(circle,rgba(45,212,191,.22),transparent 68%)}
+.b3{width:40vw;height:40vw;left:26vw;bottom:-20vw;background:radial-gradient(circle,rgba(16,185,129,.2),transparent 68%)}
+
+.glass{position:relative;isolation:isolate;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
+  backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);
+  border:1px solid rgba(255,255,255,.14);border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.25)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 80% at 50% -20%,rgba(255,255,255,.18),transparent 60%)}
+
+/* ── header ─────────────────────────────────────────────── */
+.wrap{position:relative;z-index:1;width:min(880px,92vw);margin:0 auto;
+  padding:clamp(48px,8vh,84px) 0 calc(48px + env(safe-area-inset-bottom))}
+.home{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(235,242,240,.45);
+  transition:color .18s}
+.home:hover{color:#7DE9C0}
+h1{margin-top:26px;font-size:clamp(30px,6vw,48px);font-weight:700;letter-spacing:-.03em}
+.lede{margin-top:12px;max-width:60ch;font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:13px;line-height:1.7;color:rgba(235,242,240,.55)}
+.lede a{color:#7DE9C0;text-decoration:none;border-bottom:1px solid rgba(125,233,192,.3)}
+.lede a:hover{border-bottom-color:#7DE9C0}
+
+/* ── platform cards ─────────────────────────────────────── */
+.grid{margin-top:38px;display:grid;gap:16px}
+.card{padding:24px 24px 22px;display:grid;gap:18px;
+  grid-template-columns:52px 1fr auto;align-items:center}
+@media (max-width:660px){.card{grid-template-columns:44px 1fr;gap:14px}
+  .card .act{grid-column:1 / -1}}
+
+.icon{width:52px;height:52px;display:grid;place-items:center;border-radius:14px;
+  background:linear-gradient(160deg,rgba(52,211,153,.28),rgba(52,211,153,.06));
+  border:1px solid rgba(52,211,153,.34)}
+@media (max-width:660px){.icon{width:44px;height:44px;border-radius:12px}}
+.icon svg{width:26px;height:26px;fill:#7DE9C0}
+@media (max-width:660px){.icon svg{width:22px;height:22px}}
+
+.info h2{font-size:19px;font-weight:700;letter-spacing:-.015em}
+.info .blurb{margin-top:5px;font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:12px;line-height:1.55;color:rgba(235,242,240,.5)}
+.info .stat{margin-top:9px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
+  letter-spacing:.03em;color:rgba(235,242,240,.4)}
+.info .stat b{font-weight:600;color:rgba(235,242,240,.66)}
+.info .stat .sep{color:rgba(235,242,240,.2)}
+.info .stat .skel{display:inline-block;width:112px;height:11px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.15),rgba(255,255,255,.07));
+  background-size:200% 100%;animation:shimmer 1.3s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.act{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:196px}
+@media (max-width:660px){.act{min-width:0;margin-top:4px}}
+.now{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Space Grotesk',system-ui,sans-serif;font-size:15px;font-weight:700;
+  letter-spacing:-.01em;color:#04120C;text-decoration:none;cursor:pointer;
+  padding:14px 22px;border-radius:13px;
+  background:linear-gradient(180deg,#5CF0B6,#22C48C);
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow:0 10px 30px rgba(52,211,153,.28),inset 0 1px 0 rgba(255,255,255,.6);
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,filter .2s}
+.now:hover{transform:translateY(-2px);filter:brightness(1.06);
+  box-shadow:0 16px 44px rgba(52,211,153,.4),inset 0 1px 0 rgba(255,255,255,.7)}
+.now:active{transform:translateY(0)}
+.now:focus-visible{outline:2px solid #7DE9C0;outline-offset:3px}
+.now svg{width:17px;height:17px;fill:currentColor;flex-shrink:0}
+.notes{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.06em;text-align:center;text-decoration:none;
+  color:rgba(235,242,240,.42);transition:color .18s}
+.notes:hover{color:#7DE9C0}
+
+/* a platform with no published release yet */
+.card.pending .now{background:rgba(255,255,255,.06);color:rgba(235,242,240,.6);
+  border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  pointer-events:none}
+.card.pending .icon{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.card.pending .icon svg{fill:rgba(235,242,240,.4)}
+
+/* ── terminal alternative ───────────────────────────────── */
+.alt{margin-top:34px;display:flex;align-items:center;gap:12px;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(235,242,240,.28)}
+.alt::before,.alt::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent)}
+.curl{margin-top:16px;display:flex;align-items:center;gap:14px;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;
+  padding:13px 15px;cursor:pointer;opacity:.85;transition:.18s}
+.curl:hover{opacity:1;border-color:rgba(52,211,153,.45)}
+.curl code{flex:1;white-space:nowrap;overflow-x:auto;color:#EBF2F0}
+.curl .p{color:#34D399}
+.copy{font-family:inherit;font-size:11px;font-weight:600;color:#EBF2F0;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:6px 12px;
+  background:rgba(255,255,255,.06);cursor:pointer;transition:.18s}
+.copy:hover{background:rgba(52,211,153,.16);border-color:rgba(52,211,153,.5);color:#7DE9C0}
+.copy.done{background:#34D399;color:#06110C;border-color:#34D399}
+
+.fine{margin-top:30px;font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:11.5px;line-height:1.75;color:rgba(235,242,240,.36)}
+.fine a{color:rgba(235,242,240,.6);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.14)}
+.fine a:hover{color:#7DE9C0;border-bottom-color:#7DE9C0}
+.fine b{font-weight:600;color:rgba(235,242,240,.58)}
+code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.92em;
+  color:#B6F5DA;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.18);
+  border-radius:5px;padding:1px 5px}
+.curl code{background:none;border:0;padding:0;color:#EBF2F0;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="field"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+
+<div class="wrap">
+  <a class="home" href="index.html">&larr; Weald</a>
+  <h1>Download Weald</h1>
+  <p class="lede">Every build is published as a GitHub release on the
+    <a href="https://github.com/Weald-Protocol" target="_blank" rel="noopener">Weald&nbsp;Protocol</a>
+    account, and this page reads the latest one directly. No stale links, no version to
+    look up.</p>
+
+  <div class="grid">
+
+    <!-- macOS ------------------------------------------------------------ -->
+    <section class="card glass" data-repo="Weald-Protocol/weald-mac" data-ext=".dmg">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.75c0-2.3 1.87-3.4 1.95-3.45-1.06-1.56-2.72-1.77-3.3-1.79-1.4-.14-2.74.83-3.45.83-.72 0-1.81-.81-2.98-.79-1.53.02-2.95.89-3.74 2.27-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74s1.78.74 2.99.72c1.24-.02 2.03-1.13 2.79-2.24.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65Zm-2.26-6.7c.63-.76 1.05-1.82.93-2.87-.9.04-2 .6-2.65 1.36-.58.67-1.09 1.75-.95 2.78 1.01.08 2.03-.51 2.67-1.27Z"/></svg>
+      </div>
+      <div class="info">
+        <h2>macOS</h2>
+        <p class="blurb">The terminal and mission control. Signed, notarized, and stapled, so it opens with no warnings.</p>
+        <p class="stat"><span class="skel"></span></p>
+      </div>
+      <div class="act">
+        <a class="now" href="https://github.com/Weald-Protocol/weald-mac/releases/latest">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.6l3.3-3.3 1.4 1.4L12 18.4l-4.7-5.7 1.4-1.4L12 14.6V3h0Z"/><path d="M4 19h16v2H4z"/></svg>
+          Download Now
+        </a>
+        <a class="notes" href="https://github.com/Weald-Protocol/weald-mac/releases" target="_blank" rel="noopener">All releases &rarr;</a>
+      </div>
+    </section>
+
+    <!-- Android ---------------------------------------------------------- -->
+    <section class="card glass" data-repo="Weald-Protocol/weald-android" data-ext=".apk">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9h12v8.5A2.5 2.5 0 0 1 15.5 20h-7A2.5 2.5 0 0 1 6 17.5V9Zm-2.75.25a1.25 1.25 0 0 1 1.25 1.25v4a1.25 1.25 0 0 1-2.5 0v-4a1.25 1.25 0 0 1 1.25-1.25Zm17.5 0a1.25 1.25 0 0 1 1.25 1.25v4a1.25 1.25 0 0 1-2.5 0v-4a1.25 1.25 0 0 1 1.25-1.25ZM9.5 20.5a1.25 1.25 0 0 1 2.5 0v1.75a1.25 1.25 0 0 1-2.5 0V20.5Zm2.5 0a1.25 1.25 0 0 1 2.5 0v1.75a1.25 1.25 0 0 1-2.5 0V20.5ZM6.2 7.6a5.9 5.9 0 0 1 11.6 0H6.2Zm2.9-3.5a.62.62 0 1 0 .62-1.08.62.62 0 0 0-.62 1.08Zm5.8 0a.62.62 0 1 0 .62-1.08.62.62 0 0 0-.62 1.08ZM7.9 2.2l.9 1.6-.7.4-.9-1.6.7-.4Zm8.2 0 .7.4-.9 1.6-.7-.4.9-1.6Z"/></svg>
+      </div>
+      <div class="info">
+        <h2>Android</h2>
+        <p class="blurb">The companion app. A signed <code>.apk</code>, installed directly. Allow installs from your browser when Android asks.</p>
+        <p class="stat"><span class="skel"></span></p>
+      </div>
+      <div class="act">
+        <a class="now" href="https://github.com/Weald-Protocol/weald-android/releases/latest">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.6l3.3-3.3 1.4 1.4L12 18.4l-4.7-5.7 1.4-1.4L12 14.6V3h0Z"/><path d="M4 19h16v2H4z"/></svg>
+          Download Now
+        </a>
+        <a class="notes" href="https://github.com/Weald-Protocol/weald-android/releases" target="_blank" rel="noopener">All releases &rarr;</a>
+      </div>
+    </section>
+
+    <!-- Relay host ------------------------------------------------------- -->
+    <section class="card glass" data-repo="Weald-Protocol/weald-relay-host" data-ext=".dmg">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm0 10h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Zm2.5-7.5h1.6v1.6H6.5V6.5Zm0 10h1.6v1.6H6.5v-1.6Z"/></svg>
+      </div>
+      <div class="info">
+        <h2>Relay Host <span style="font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:.08em;color:rgba(235,242,240,.4)">· OPTIONAL</span></h2>
+        <p class="blurb">Self-host the blind relay on your own Mac. Start it, copy the URL, paste it into a project. Nothing leaves your machine.</p>
+        <p class="stat"><span class="skel"></span></p>
+      </div>
+      <div class="act">
+        <a class="now" href="https://github.com/Weald-Protocol/weald-relay-host/releases/latest">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.6l3.3-3.3 1.4 1.4L12 18.4l-4.7-5.7 1.4-1.4L12 14.6V3h0Z"/><path d="M4 19h16v2H4z"/></svg>
+          Download Now
+        </a>
+        <a class="notes" href="https://github.com/Weald-Protocol/weald-relay-host/releases" target="_blank" rel="noopener">All releases &rarr;</a>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="alt">or install from the terminal</div>
+  <div class="curl glass" id="curl" title="Click to copy">
+    <code><span class="p">&#10148;</span> <span id="curlCmd">curl -L -o Weald.dmg https://github.com/Weald-Protocol/weald-mac/releases/latest/download/Weald.dmg</span></code>
+    <button class="copy" id="copyBtn">copy</button>
+  </div>
+
+  <p class="fine">
+    <b>macOS 14 or later.</b> Universal, Apple silicon and Intel. Open the
+    <code>.dmg</code> and drag Weald to Applications.<br>
+    <b>Android 8.0 or later.</b> Tap the <code>.apk</code> to install.<br>
+    Source and the protocol spec: <a href="https://github.com/Weald-Protocol/wealdrelay" target="_blank" rel="noopener">wealdrelay</a>.
+    Questions: <a href="faq.html">FAQ</a> &middot; <a href="docs.html">Documentation</a> &middot; <a href="install.html">Install guide</a>
+  </p>
+</div>
+
+<script>
+// Fill each card from the GitHub releases API. The buttons are already real
+// links to the releases page, so a failed or rate-limited fetch just leaves the
+// page one click longer rather than broken.
+const nf = new Intl.DateTimeFormat(undefined, {year:'numeric', month:'short', day:'numeric'});
+
+function mb(bytes){ return (bytes / 1048576).toFixed(1).replace(/\.0$/,'') + ' MB'; }
+
+function paint(card, rel){
+  const ext = card.dataset.ext;
+  const version = String(rel.tag_name || '').replace(/^v/i, '');
+  // Releases carry a versioned asset plus a version-free alias of the same
+  // bytes. Prefer the versioned one so the download is self-describing.
+  const matching = (rel.assets || []).filter(a => a.name.endsWith(ext));
+  const asset = matching.find(a => version && a.name.includes(version)) || matching[0];
+  const stat = card.querySelector('.stat');
+  const btn = card.querySelector('.now');
+  const notes = card.querySelector('.notes');
+
+  const bits = [];
+  if (version) bits.push('<b>Version ' + version + '</b>');
+  if (rel.published_at) bits.push(nf.format(new Date(rel.published_at)));
+  if (asset) bits.push(mb(asset.size));
+  bits.push('<code>' + ext + '</code>');
+  stat.innerHTML = bits.join('<span class="sep">·</span>');
+
+  if (asset){
+    btn.href = asset.browser_download_url;
+    btn.setAttribute('download', asset.name);
+  }
+  if (rel.html_url) notes.href = rel.html_url.replace(/\/tag\/.*$/, '');
+}
+
+function pending(card, why){
+  card.classList.add('pending');
+  card.querySelector('.stat').innerHTML = why;
+  card.querySelector('.now').innerHTML =
+    card.querySelector('.now').innerHTML.replace('Download Now', 'Coming soon');
+}
+
+document.querySelectorAll('.card[data-repo]').forEach(async card => {
+  const repo = card.dataset.repo;
+  try {
+    const res = await fetch('https://api.github.com/repos/' + repo + '/releases/latest',
+      { headers: { 'Accept': 'application/vnd.github+json' } });
+    if (res.status === 404){ pending(card, 'No public release yet'); return; }
+    if (!res.ok) throw new Error(res.status);
+    paint(card, await res.json());
+  } catch (e) {
+    // Offline or rate limited: leave the static releases-page link in place.
+    card.querySelector('.stat').innerHTML = 'Latest release <span class="sep">·</span> on GitHub';
+  }
+});
+
+const btn = document.getElementById('copyBtn');
+document.getElementById('curl').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(document.getElementById('curlCmd').textContent);
+    btn.textContent = 'copied ✓'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1600);
+  } catch (e) {}
+});
+</script>
+</body>
+</html>
